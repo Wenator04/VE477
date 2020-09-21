@@ -1,4 +1,4 @@
-#VE477 Labs
+# VE477 Labs
 ### Lab1
 -   Dictionary(sorted double link lists)
 -   Hash tables
