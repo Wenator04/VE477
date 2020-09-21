@@ -1,0 +1,149 @@
+\documentclass[a4paper]{article}
+\usepackage{ulem}
+\usepackage{graphicx}
+\usepackage[namelimits]{amsmath}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\usepackage{enumerate}
+\usepackage{indentfirst}
+\usepackage{multirow}
+\usepackage{latexsym}
+\usepackage{subfig}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\lstset{numbers=left,
+	numberstyle=\tiny,
+	frame=shadowbox,
+	backgroundcolor=\color[RGB]{245,245,244},
+	keywordstyle=\color[RGB]{40,40,255},
+	numberstyle=\footnotesize\color{darkgray},
+	commentstyle=\color[RGB]{50,50,50},
+	breaklines=true}
+
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\title{UM-SJTU JOINT INSTITUTE\\VE477 Introduction to Algorithms\\\vspace{0.5cm} Homework 1}
+\author{Li Yong 517370910222}
+\begin{document}
+\maketitle
+\newpage
+
+\section*{Ex.1 Hash tables}
+	\begin{enumerate}[1.]
+		\item $n$ slots, $n$ keys are equiprobably hashed to each slot, hence the probability that a key hashed to the certain slot is uniform, which is equal to $\frac{1}{n}$.\\
+		Hence according to the binomial distribution, the probability $P_k$ that exactly $k$ keys hash to a same slot is
+		$$\left(\frac{1}{n}\right)^k\left(1-\frac{1}{n}\right)^{n-k}\binom{n}{k}$$
+		\item Considering the event $X_i$ that slot $i$ with the most keys to have exactly $k$ keys, i.e., exactly $k$ keys hash to slot $i$ $\wedge$ less than $k$ keys hash to other slots. Hence
+		$$P(X_i)\leq P_k$$
+		The probability $P'_k$ for the slot with the most keys to have exactly $k$ keys
+		$$P'_k=\sum^n_{i=0} P(X_i)\leq nP_k$$
+		\item \begin{align*}
+		P_k&=\left(\frac{1}{n}\right)^k\left(1-\frac{1}{n}\right)^{n-k}\binom{n}{k}\\
+		&\leq\left(\frac{1}{n}\right)^k\frac{n!}{k!(n-k)!}\\
+		&\leq\left(\frac{1}{n}\right)^k\frac{n^k}{k!}\\
+		&=\frac{1}{k!}\\
+		&\approx \frac{1}{\sqrt{2\pi k}(\frac{k}{e})^k}\\
+		&\leq \frac{e^k}{k^k}
+		\end{align*}
+		\item \begin{align*}
+		&P'_k < 1/n^2\\
+		&P_k = \frac{e^k}{k^k} < 1/n^3\\
+		&\frac{k^k}{e^k} > n^3\\
+		&k(\log{k}-\log{e}) > 3\log{n}\\
+		&c\log{n}/\log{\log{n}}(\log({c\log{n}/\log{\log{n}}})-\log{e}) > 3\log{n}\\
+		&c\log{n}/\log{\log{n}}(\log{c}+\log{\log{n}}-\log{\log{\log{n}}}-\log{e}) > 3\log{n}\\
+		&c(1+\frac{\log{c}-\log{\log{\log{n}}}-\log{e}}{\log{\log{n}}}) > 3\\
+		\end{align*}
+		Considering $f(x)=1-\frac{\log{n}}{n}$, $f'(x)=\frac{\log{x}-\frac{1}{\ln{2}}}{x^2}$
+		$$f'(x)=\frac{\log{x}-\frac{1}{\ln{2}}}{x^2}=0 \Rightarrow x=e$$
+		$$f(x)_{max}=f(e)=1-\frac{\log{e}}{e}=0.469$$
+		Then
+		$$c(1+\frac{\log{c}-\log{\log{\log{n}}}-\log{e}}{\log{\log{n}}})=c(1+0.469) > 3$$
+		$$c>4.407$$
+		\item
+		\begin{align*}
+			E[M] &= \sum_{k=1}^n k\cdot Pr(M=k)\\
+			&=\sum_{k=\lceil\frac{c\log{n}}{\log{\log{n}}}\rceil}^n k\cdot Pr(M=k)+\sum_{k=1}^{\lceil\frac{c\log{n}}{\log{\log{n}}}\rceil-1} k\cdot Pr(M=k)\\
+			&\leq n\sum_{k=\lceil\frac{c\log{n}}{\log{\log{n}}}\rceil}^n Pr(M=k)+\frac{c\log{n}}{\log{\log{n}}}\sum_{k=1}^{\lceil\frac{c\log{n}}{\log{\log{n}}}\rceil-1}  Pr(M=k)\\
+			&=Pr\left(M>\frac{c\log{n}}{\log{\log{n}}}\right)n+Pr\left(M\leq \frac{c\log{n}}{\log{\log{n}}}\right)\frac{c\log{n}}{\log{\log{n}}}
+		\end{align*}
+	\end{enumerate}
+
+\section*{Ex.2 Minimum spanning tree}
+\begin{algorithm}
+	\caption{Minimum spanning tree}
+	\begin{algorithmic}[1]
+		\Require A minimum spanning tree $T$ of $G=<V,E>$, the decreased edge $E(u,v)$
+		\Ensure A new minimum spanning tree $T'$ of $G=<V,E>$
+		\State $T'\leftarrow T+E$
+		\State $E'\leftarrow$ the edge with the largest weight in the circle in $T'$ formed by $E$
+		\If{$E'.$weight$\ > E.$weight}
+			\State $T'\leftarrow T'-E'$
+		\Else
+			\State $T'\leftarrow T$
+		\EndIf
+		\State\Return $T'$
+	\end{algorithmic}
+\end{algorithm}
+
+\section*{Ex.3 Simple algorithm}
+	\begin{enumerate}
+		\item \begin{algorithm}
+			\caption{Sum of $n$-bit integers}
+			\begin{algorithmic}[1]
+				\Require Array $X$, $Y$ with $n$ elements, which store two $n$-bits integers
+				\Ensure Array $Z$ with $n+1$ elements, which store the sum of the two integers
+				\State count$\leftarrow$0;
+				\For{i = $n$ to 1}
+					\State $Z$[i] = ($X$[i] + $Y$[i] + count) / 10;
+					\State count = ($X$[i] + $Y$[i]) \% 10;
+				\EndFor
+				\State $Z$[n+1] = count / 10;
+				\State\Return $Z$
+			\end{algorithmic}
+		\end{algorithm}
+		\item \begin{enumerate}
+			\item
+			\begin{algorithm}
+				\caption{mult($x$, $y$)}
+				\begin{algorithmic}[1]
+					\Require Two integers $x$, $y$
+					\Ensure Product of $x$ and $y$
+					\If{$x$ = 0 \textbf{or} $y$ = 0}
+						\State \Return 0
+					\EndIf
+					\State \Return mult($2x$, $\lfloor y/2\rfloor$) + $x\cdot(y$ mod $2$)
+				\end{algorithmic}
+			\end{algorithm}
+			\newpage
+			\item Considering the bit operation of $x$ and  $y$, we can regard $\lfloor y/2\rfloor$ as $y>>1$, then $(y$ mod $2)$ get the last bit of $y$, which will be left by $>>$ operation. The last bit of $y$ multipled by $2x$ can be regard as shift the last bit left then multipled by $x$. In other words, the algorithm seperate $y$ in binary bits and calulate the product of each bit and $x$, then combinate the results by bit operation.
+			\end{enumerate}
+		\end{enumerate}
+
+\section*{Ex.4 Problem}
+	The minimum number of races necessary is 7.\par
+	Seperate 25 horses into 5 groups of 5 horse. Race these 5 groups. Then race the fastest horse of each group to obtain the fastest horse among the 25 horses. Then pick the 2nd and 3rd fastest horses in the two race that the fastest horse joined, also the 2nd fastest horse in the group race that the 2nd horse in the latest race joined. Then race the picked horses. Top 2 of the race will be the 2nd and 3rd fastest horse among the 25 horses.
+
+\section*{Ex.5 Critical thinking}
+	\begin{enumerate}[1.]
+		\item First of all, both of the algorithms can be failed in some cases. However, compared with each other, ``largest first'' is much better. Here I list two reasons:
+		\begin{enumerate}[i.]
+			\item If both of the algorithms give solutions, ``smallest first'''s solution is probably less optimal than ``largest first'''s. Unless all the numbers in $S$ are consumed, the sum of some smaller numbers that consist of the solution can be substituted by the larger number.
+			\item Also, I found an article that proved that under the condition that $S=\{s\mid s=c^k, k\in \mathbb{N}\}$, ``largest first'' greedy algorithm must have the optimal solution.
+		\end{enumerate}
+		\item If $m$ is a power of 2, then it will be an extreme deficient case. When we operate the hash function $H(k) = k$ mod $m$ in bit operation, we noticed that when $m=2^n$, $H(k)$ will be the lowest $n$ bits of $k$, i.e., it wastes part of the bits. So that we would like to choose an $m$ not too close from a power of 2 to avoid the deficiency.\\
+		Also, we perfer a prime for it can reduce the number of common factors between $k$ and $m$. If $k$ shares a common factor with $m$, $k$ will be hased to a bucket that is a multiple of the common factor, so that the buckets that are not a multiple of the common factor will hash much less key than those are.
+		\item The \textit{Nearest neighbor} mentioned in the class is an example of a greedy algorithm which is locally optimal while not being globally optimal. And the discussion in the class provide all the necessary details to support my claim.
+	\end{enumerate}
+
+\newpage
+\begin{thebibliography}{99}
+	\bibitem{ref1}\textif{Proof of Greedy Algorithm in Knapsack Problem}, https://www.cnblogs.com/hapjin/p/5575112.html
+\end{thebibliography}
+\end{document}
