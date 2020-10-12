@@ -6,3 +6,7 @@
 ### Lab2
 -   Kruskal
 -   Prim
+### Lab3
+-   sort and count
+-   Gale-Shapley
+-   Knapsack problem
