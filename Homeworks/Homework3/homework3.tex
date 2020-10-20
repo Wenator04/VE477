@@ -203,9 +203,30 @@ A Rubik's cube is a mechanical puzzle in the shape of a 3$\times$3 cube which is
 \end{enumerate}
 
 \section*{Ex.5 PRIMES is in $\mathcal{P}$}
-
+The time complexity of division process\cite{ref3} is $\mathcal{O}(\log{n})$, when $n$ is sufficiently large.
+\begin{lstlisting}[language=C]
+int Pos_Div(int x, int y)
+{
+	int ans = 0;
+	for (int i = log(x)/log(2); i >= 0; i--)
+	{
+		if ((x >> i) >= y)
+		{
+			ans += (1 << i);
+			x -= (y << i);
+		}
+	}
+	return ans;
+}
+\end{lstlisting}
+According to Prime Number Theorem, the number of primes less than integer $n$ is
+$$\pi(n) \sim \frac{n}{\ln{n} + B},$$
+which is the times of division process. Hence the time complexity of trial division is
+$$\mathcal{O}\left(\frac{\log{n}}{\ln{n}}n\right)=\mathcal{O}(\log{e}\cdot n) = \mathcal{O}(n)$$
+Hence it is in $\mathcal{P}$.
 \begin{thebibliography}{99}
 \bibitem{ref1}https://hobbylark.com/puzzles/Rubik-Cube-Algorithms
 \bibitem{ref2}https://ruwix.com/the-rubiks-cube/advanced-cfop-fridrich/
+\bibitem{ref3}https://www.zhihu.com/question/47423427
 \end{thebibliography}
 \end{document}
