@@ -1,12 +1,19 @@
 # VE477 Labs
-### Lab1
+### Lab 1
 -   Dictionary(sorted double link lists)
 -   Hash tables
 -   Phone book
-### Lab2
+### Lab 2
 -   Kruskal
 -   Prim
-### Lab3
+### Lab 3
 -   sort and count
 -   Gale-Shapley
 -   Knapsack problem
+### Lab 4
+-   Fibonacci heap
+### Lab 5
+-   Dense graph
+-   Sparse graph
+-   Dijkstra
+-   Bellman-Ford
